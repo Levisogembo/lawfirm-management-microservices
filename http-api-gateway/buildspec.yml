@@ -8,7 +8,7 @@ phases:
       - echo "Listing root directory:"
       - ls -la
       - echo "Changing to api-gateway directory..."
-      - cd api-gateway
+      - cd http-api-gateway
       - echo "Now in: $(pwd)"
       - echo "Listing api-gateway contents:"
       - ls -la
