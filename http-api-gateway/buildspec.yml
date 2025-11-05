@@ -3,7 +3,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Testing ECR buildspec file"
+      - echo "Starting the build phase"
+      - echo "Current directory is: $(pwd)"
+      - echo "Moving to http-api-gateway"
+      - cd http-api-gateway
+      - echo "Loggin in into Amazon ECR"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo "Repository URI: $REPOSITORY_URI"
+      - echo "Image tag: $IMAGE_TAG"
   build:
     commands:
       - echo "Entering the build phase"
