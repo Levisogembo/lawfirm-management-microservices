@@ -29,9 +29,9 @@ import {APP_GUARD} from '@nestjs/core'
     ConfigModule.forRoot({ isGlobal: true }), NatsModule, UsersModule,
     RolesModule, PermissionsModule,
     AuthModule, TasksModule,
-    ClientsModule, CaseModule, FilesModule, S3FilingModule, VisitorsModule, AppointmentsModule
+    ClientsModule, CaseModule, FilesModule, S3FilingModule, VisitorsModule, AppointmentsModule, AppModule
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [{
     provide: APP_GUARD,
     useClass: ThrottlerGuard

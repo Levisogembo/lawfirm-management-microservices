@@ -10,7 +10,7 @@ async function bootstrap() {
   
   //applying the exeption filter globally
  app.useGlobalFilters(new AllExceptionsFilter())  
-  await app.listen(process.env.PORT ?? 3000).then(()=>console.log(`App is running and listening on port 3000`));
+  await app.listen(process.env.PORT ?? 3000,'0.0.0.0').then(()=>console.log(`App is running and listening on port 3000`));
   
 }
 bootstrap();
