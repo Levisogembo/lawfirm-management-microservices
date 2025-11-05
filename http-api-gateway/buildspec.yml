@@ -24,7 +24,6 @@ phases:
     commands:
       - echo "Entering the post build phase"
       - echo "Pushing image to ECR..."
-      - docker push $REPOSITORY_URI:latest
       - echo "Pushing commit hash tag"
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "Creating pipeline artifacts"
