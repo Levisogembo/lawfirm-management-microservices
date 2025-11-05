@@ -3,26 +3,34 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "=== STARTING BUILD ==="
+      - echo "=== STARTING API GATEWAY BUILD ==="
       - echo "Current directory: $(pwd)"
-      - echo "Listing root directory:"
-      - ls -la
-      - echo "Changing to api-gateway directory..."
+      - echo "Changing to http-api-gateway directory..."
       - cd http-api-gateway
       - echo "Now in: $(pwd)"
-      - echo "Listing api-gateway contents:"
+      - echo "Listing contents:"
       - ls -la
+      
+      # ECR login
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      
   build:
     commands:
-      - echo "=== BUILD PHASE ==="
-      - echo "Build would happen here"
-      - echo "Simulating successful build"
+      - echo "Building Docker image..."
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      
   post_build:
     commands:
-      - echo "=== POST BUILD ==="
-      - echo "Build completed successfully"
-      - echo "Creating dummy imagedefinitions.json..."
-      - echo '[{"name":"app-container","imageUri":"123456.dkr.ecr.region.amazonaws.com/repo:latest"}]' > imagedefinitions.json
+      - echo "Pushing to ECR..."
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Creating imagedefinitions.json..."
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI:latest > imagedefinitions.json
+
 artifacts:
   files:
     - imagedefinitions.json
