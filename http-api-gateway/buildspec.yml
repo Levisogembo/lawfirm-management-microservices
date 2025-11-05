@@ -4,10 +4,8 @@ phases:
   pre_build:
     commands:
       - echo "Starting the build phase"
-      - echo "Current directory is: $(pwd)"
-      - echo "Moving to http-api-gateway"
+      - echo "Entering the api gateway"
       - cd http-api-gateway
-      - echo "Loggin in into Amazon ECR"
   build:
     commands:
       - echo "Entering the build phase"
