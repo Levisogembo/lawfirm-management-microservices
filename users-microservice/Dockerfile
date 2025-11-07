@@ -4,11 +4,12 @@ FROM public.ecr.aws/docker/library/node:22 AS builder
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
+RUN npm run build
 
 FROM public.ecr.aws/docker/library/node:22 AS runner
 
