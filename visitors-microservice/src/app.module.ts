@@ -18,7 +18,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env.test'//override the config just for testing
+      envFilePath: process.env.NODE_ENV === 'TEST' ? '.env.test' : '.env'//override the config just for testing
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
