@@ -36,7 +36,7 @@ describe('roles (e2e)', () => {
     })
     const dataSource = app.get(DataSource)
     await dataSource.synchronize(true)
-    // Seed a real user to satisfy FK constraints on tasks.assigned_to
+  
     const userRepo = dataSource.getRepository(User)
     const seededUser = await userRepo.save({
       email: `user_e2e@example.com`,

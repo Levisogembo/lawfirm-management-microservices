@@ -14,10 +14,12 @@ RUN npm run build
 FROM public.ecr.aws/docker/library/node:22 AS runner
 
 WORKDIR /usr/src/app
+
 ENV NODE_ENV=production
 
 # Install only production dependencies
 COPY package*.json ./
+
 RUN npm ci --omit=dev
 
 # Copy compiled output and minimal runtime files
